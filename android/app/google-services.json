@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "327821746389",
+    "project_id": "kyria-51a4a",
+    "storage_bucket": "kyria-51a4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327821746389:android:d9e5fffffdfeb0c238025c",
+        "android_client_info": {
+          "package_name": "com.kyria.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327821746389-rdrpspf9a42h54s9hsvc4eikqf3oacrr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQeMLiOvJfxupM06qyatG-BUlWrJPyMBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327821746389-rdrpspf9a42h54s9hsvc4eikqf3oacrr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
