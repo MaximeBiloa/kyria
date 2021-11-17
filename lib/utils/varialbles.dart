@@ -1,2 +1,2 @@
-bool themeMode = true;
+bool themeMode = false;
 String appTitle = "KYRIA";

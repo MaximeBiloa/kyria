@@ -8,6 +8,7 @@ import 'package:kyria/screens/discussion_screen.dart';
 import 'package:kyria/screens/inbox_screen.dart';
 import 'package:kyria/utils/colors.dart';
 import 'package:kyria/utils/local_datas.dart';
+import 'package:kyria/utils/local_user_infos_preferences.dart';
 import 'package:kyria/utils/varialbles.dart';
 
 class Login extends StatefulWidget {
@@ -41,11 +42,9 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _authProvider = new AuthProvider();
-    loginMedthod();
   }
 
   bool validateForm() {
-    return true;
     setState(() {
       emailMsgError = '';
       passwordMsgError = '';
@@ -71,10 +70,11 @@ class _LoginState extends State<Login> {
 
       final user = {'email': email, 'password': password};
 
-      //REGISTER PROCESS
+      //LOGIN PROCESS
       _authProvider.signIn(user).then((value) {
         setState(() {
           if (value == true) {
+            LocalUserInfoPreferences.saveUserProfile(email, password);
             //GET USER DATAS
             UserProvider userProvider =
                 new UserProvider(uid: _authProvider.getUid());

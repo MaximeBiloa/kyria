@@ -16,4 +16,4 @@ Color darkAppFontColor = Colors.white;
 Color lightAppFontColor = Colors.black;
 
 //Variable pour le theme
-Color themeAppColor = darkAppBackgroundColor;
+Color themeAppColor = lightAppBackgroundColor;

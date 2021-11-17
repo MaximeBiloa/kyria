@@ -50,7 +50,7 @@ class _InboxScreenState extends State<InboxScreen> {
   bool msgSelectedHasSendByMe = false;
 
   //DEFINE FOCUS
-  final FocusNode _focusNode = FocusNode();
+  FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -841,6 +841,7 @@ class _InboxScreenState extends State<InboxScreen> {
                                       getMessageByKey(keyMessageSelected[0]));
                                   keyMessageSelected = [];
                                 });
+                                _focusNode.requestFocus(_focusNode);
                               },
                               child: Image.asset(
                                 'assets/images/reply-dark.png',
@@ -1208,195 +1209,171 @@ class _InboxScreenState extends State<InboxScreen> {
                           ? themeAppColor.withOpacity(0.15)
                           : Colors.white,
                     ),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          //top: 0,
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Divider(
+                            height: 1.5,
+                            color: themeMode
+                                ? Colors.grey.shade900
+                                : Colors.grey.shade300,
+                          ),
+                          Container(
+                            //color: themeMode ? Colors.black : Colors.white,
+                            margin: EdgeInsets.only(top: 8, bottom: 10),
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Divider(
-                                  height: 1.5,
-                                  color: themeMode
-                                      ? Colors.grey.shade900
-                                      : Colors.grey.shade300,
-                                ),
-                                Container(
-                                  //color: themeMode ? Colors.black : Colors.white,
-                                  margin: EdgeInsets.only(top: 8, bottom: 10),
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          padding: EdgeInsets.only(
-                                              left: 20, right: 50),
-                                          decoration: BoxDecoration(
-                                              color: themeAppColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              border: Border.all(
-                                                  color: themeMode
-                                                      ? Colors.grey.shade900
-                                                      : Colors.grey.shade300)),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  constraints: BoxConstraints(
-                                                    maxHeight: 100.0,
-                                                  ),
-                                                  child: TextFormField(
-                                                    focusNode: _focusNode,
-                                                    controller:
-                                                        messageInputController,
-                                                    onChanged: (msg) {
-                                                      setState(() {
-                                                        typingMsg = msg;
-                                                      });
-                                                    },
-                                                    maxLines: null,
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            'myriad_regular',
-                                                        fontSize: 17,
-                                                        color: themeMode
-                                                            ? Colors.white
-                                                            : Colors.black),
-                                                    decoration: InputDecoration(
-                                                      border: InputBorder.none,
-                                                      hintText:
-                                                          'Écrire à Kyria...',
-                                                      hintStyle: TextStyle(
-                                                          fontFamily:
-                                                              'myriad_regular',
-                                                          fontSize: 17,
-                                                          color:
-                                                              subtitleTextColor),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      GestureDetector(
-                                        onTap: typingMsg.trim().length == 0
-                                            ? null
-                                            : () {
+                                Expanded(
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.only(left: 20, right: 50),
+                                    decoration: BoxDecoration(
+                                        color: themeAppColor,
+                                        borderRadius: BorderRadius.circular(25),
+                                        border: Border.all(
+                                            color: themeMode
+                                                ? Colors.grey.shade900
+                                                : Colors.grey.shade300)),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            constraints: BoxConstraints(
+                                              maxHeight: 100.0,
+                                            ),
+                                            child: TextFormField(
+                                              focusNode: _focusNode,
+                                              autofocus: true,
+                                              controller:
+                                                  messageInputController,
+                                              onChanged: (msg) {
                                                 setState(() {
-                                                  listeDiscussions = [];
-                                                });
-
-                                                //GET MESSAGE KEY GENERATED
-                                                String msgKey = messageProvider
-                                                    .generateMessageKey();
-
-                                                //FIRST TIME, SAVE MESSAGE TO KYRIA DISCUSSION COLLECTION
-                                                messageProvider.saveMessageToKyria(
-                                                    {
-                                                      'msg_content': typingMsg,
-                                                      'formated_date':
-                                                          DateTime.now()
-                                                              .toString(),
-                                                      'send_by':
-                                                          widget.discussionType ==
-                                                                  1
-                                                              ? 0
-                                                              : 1,
-                                                      'reply': reply
-                                                          ? {
-                                                              'msg_key':
-                                                                  replyMsg.key,
-                                                              'msg_content':
-                                                                  replyMsg
-                                                                      .msg_content,
-                                                              'formated_date':
-                                                                  replyMsg
-                                                                      .formated_date,
-                                                              'send_by':
-                                                                  replyMsg
-                                                                      .send_by
-                                                            }
-                                                          : null
-                                                    },
-                                                    widget.discussionType == 0
-                                                        ? localUserInfos.key
-                                                        : widget
-                                                            .currentDiscussion
-                                                            .discussion_key);
-                                                //SECOND TIME, SAVE MESSAGE USER PROBLEME COLLECTOON
-                                                messageProvider
-                                                    .saveMessageToUser({
-                                                  'msg_content': typingMsg,
-                                                  'formated_date':
-                                                      DateTime.now().toString(),
-                                                  'send_by':
-                                                      widget.discussionType == 1
-                                                          ? 1
-                                                          : 0,
-                                                  'reply': reply
-                                                      ? {
-                                                          'msg_key':
-                                                              replyMsg.key,
-                                                          'msg_content':
-                                                              replyMsg
-                                                                  .msg_content,
-                                                          'formated_date':
-                                                              replyMsg
-                                                                  .formated_date,
-                                                          'send_by':
-                                                              replyMsg.send_by
-                                                        }
-                                                      : null
-                                                });
-
-                                                messageInputController.clear();
-                                                /*setState(() {
-                                                  listeMessages.insert(
-                                                      0, messageTemplate);
-                                                  messageInputController.clear();
-                                                  scrollController.jumpTo(0);
-                                                });*/
-                                                print(
-                                                    "La valeur du reply est : $reply");
-                                                setState(() {
-                                                  reply = false;
+                                                  typingMsg = msg;
                                                 });
                                               },
-                                        child: Container(
-                                            width: 45,
-                                            height: 45,
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color:
-                                                  typingMsg.trim().length == 0
-                                                      ? !themeMode
-                                                          ? Colors.grey.shade500
-                                                          : Colors.grey.shade800
-                                                      : blueColor,
+                                              maxLines: null,
+                                              style: TextStyle(
+                                                  fontFamily: 'myriad_regular',
+                                                  fontSize: 17,
+                                                  color: themeMode
+                                                      ? Colors.white
+                                                      : Colors.black),
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText: 'Écrire à Kyria...',
+                                                hintStyle: TextStyle(
+                                                    fontFamily:
+                                                        'myriad_regular',
+                                                    fontSize: 17,
+                                                    color: subtitleTextColor),
+                                              ),
                                             ),
-                                            child: Image.asset(
-                                              'assets/images/icon-send.png',
-                                              width: 20,
-                                              height: 20,
-                                            )),
-                                      ),
-                                    ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                ),
+                                SizedBox(width: 10),
+                                GestureDetector(
+                                  onTap: typingMsg.trim().length == 0
+                                      ? null
+                                      : () {
+                                          setState(() {
+                                            listeDiscussions = [];
+                                          });
+
+                                          //GET MESSAGE KEY GENERATED
+                                          String msgKey = messageProvider
+                                              .generateMessageKey();
+
+                                          //FIRST TIME, SAVE MESSAGE TO KYRIA DISCUSSION COLLECTION
+                                          messageProvider.saveMessageToKyria(
+                                              {
+                                                'msg_content': typingMsg,
+                                                'formated_date':
+                                                    DateTime.now().toString(),
+                                                'send_by':
+                                                    widget.discussionType == 1
+                                                        ? 0
+                                                        : 1,
+                                                'reply': reply
+                                                    ? {
+                                                        'msg_key': replyMsg.key,
+                                                        'msg_content': replyMsg
+                                                            .msg_content,
+                                                        'formated_date':
+                                                            replyMsg
+                                                                .formated_date,
+                                                        'send_by':
+                                                            replyMsg.send_by
+                                                      }
+                                                    : null
+                                              },
+                                              widget.discussionType == 0
+                                                  ? localUserInfos.key
+                                                  : widget.currentDiscussion
+                                                      .discussion_key);
+                                          //SECOND TIME, SAVE MESSAGE USER PROBLEME COLLECTOON
+                                          messageProvider.saveMessageToUser({
+                                            'msg_content': typingMsg,
+                                            'formated_date':
+                                                DateTime.now().toString(),
+                                            'send_by':
+                                                widget.discussionType == 1
+                                                    ? 1
+                                                    : 0,
+                                            'reply': reply
+                                                ? {
+                                                    'msg_key': replyMsg.key,
+                                                    'msg_content':
+                                                        replyMsg.msg_content,
+                                                    'formated_date':
+                                                        replyMsg.formated_date,
+                                                    'send_by': replyMsg.send_by
+                                                  }
+                                                : null
+                                          });
+
+                                          messageInputController.clear();
+                                          /*setState(() {
+                                            listeMessages.insert(
+                                                0, messageTemplate);
+                                            messageInputController.clear();
+                                            scrollController.jumpTo(0);
+                                          });*/
+                                          setState(() {
+                                            reply = false;
+                                            typingMsg = '';
+                                          });
+                                        },
+                                  child: Container(
+                                      width: 45,
+                                      height: 45,
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: typingMsg.trim().length == 0
+                                            ? !themeMode
+                                                ? Colors.grey.shade500
+                                                : Colors.grey.shade800
+                                            : blueColor,
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/icon-send.png',
+                                        width: 20,
+                                        height: 20,
+                                      )),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )
                 ],

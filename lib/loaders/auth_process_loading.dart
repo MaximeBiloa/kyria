@@ -18,10 +18,9 @@ class _AuthProcessLoadingState extends State<AuthProcessLoading> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: themeAppColor,
+      color: Colors.white,
       child: Center(
         child: Container(
-          color: themeMode ? Color(0xFF3C474D).withOpacity(0.25) : Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -35,7 +34,7 @@ class _AuthProcessLoadingState extends State<AuthProcessLoading> {
                       fontFamily: 'myriad_semibold',
                       fontSize: 17,
                       color: themeMode
-                          ? Colors.grey.shade400
+                          ? Colors.grey.shade600
                           : Colors.grey.shade900,
                       fontWeight: FontWeight.w800)),
               SizedBox(height: 15),
